@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>Poster Generator by AD</title>
+  <style>
+    body {
+      font-family: 'Noto Sans Bengali', sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px;
+    }
+     form {
+      margin-bottom: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 300px;
+    }
+
+    input[type="text"], input[type="file"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+     button[type="submit"] {
+      padding: 10px;
+      background-color: #225ba6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+     button[type="submit"]:hover {
+      background-color: #0764b6;
+    }
+    #poster {
+      position: relative;
+      width: 360px;
+      height: 460px;
+      background-image: url('temple poster.png');
+      background-size: cover;
+      background-position: center;
+      text-align: center;
+      color: white;
+      font-weight: bold;
+    }
+    #poster img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-top: 160px;
+      border: 1px solid white;
+    }
+    #poster .name {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+    #poster .title {
+      font-size: 16px;
+      margin-top: 5px;
+    }
+   
+    input, button {
+      padding: 6px;
+      margin: 4px;
+    }
+
+     #downloadBtn {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #388E3C;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #downloadBtn:hover {
+      background-color: #2E7D32;
+    }
+
+    .footer-link {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 14px;
+    }
+
+    .footer-link a {
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    .footer-link a:hover {
+      text-decoration: underline;
+    }
+
+    @media screen and (max-width: 480px) {
+  body {
+    margin: 10px;
+  }
+
+  form {
+    width: 90%;
+    padding: 15px;
+  }
+
+  #poster {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    aspect-ratio: 3 / 4; /* Maintain poster ratio */
+    background-size: cover;
+    background-position: center;
+  }
+
+  #poster img {
+    width: 35vw;
+    max-width: 140px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    margin-top: 40%;
+  }
+
+  #poster .name {
+    font-size: 18px;
+  }
+
+  #poster .title {
+    font-size: 14px;
+  }
+
+  #downloadBtn {
+    width: 90%;
+    font-size: 15px;
+  }
+}
+
+  </style>
+</head>
+<body>
+    <h1>কেন্দ্রীয় উপাসনালয় সনাতনী শিক্ষার্থী পরিষদ </h1>
+  <h2>পোস্টার তৈরি করুন</h2>
+  <form id="posterForm">
+    <input type="text" id="name" placeholder="নাম" required><br>
+    <input type="text" id="title" placeholder="টাইটেল (যেমন: স্বেচ্ছাসেবক)" required><br>
+    <input type="file" id="image" accept="image/*" required><br>
+    <button type="submit">Poster তৈরি করুন</button>
+  </form>
+
+  <div id="poster" style="display: none;">
+    <img id="posterImage" src="" alt="User Image">
+    <div class="name" id="posterName"></div>
+    <div class="title" id="posterTitle"></div>
+  </div>
+
+  <div class="footer-link">
+    <a href="https://anupom-cste-nstu.netlify.app/" onclick="alert('This project is developed by Anupom Das (AD) 🧠')">About AD</a>
+  </div>
+
+  <button onclick="downloadPoster()" style="display:none;" id="downloadBtn">Download Poster</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    const form = document.getElementById('posterForm');
+    const poster = document.getElementById('poster');
+    const posterName = document.getElementById('posterName');
+    const posterTitle = document.getElementById('posterTitle');
+    const posterImage = document.getElementById('posterImage');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const title = document.getElementById('title').value;
+      const image = document.getElementById('image').files[0];
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        posterImage.src = e.target.result;
+        posterName.textContent = name;
+        posterTitle.textContent = title;
+        poster.style.display = 'block';
+        downloadBtn.style.display = 'inline-block';
+      }
+      reader.readAsDataURL(image);
+    });
+
+    function downloadPoster() {
+      html2canvas(poster).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'poster.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>
